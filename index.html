@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>NBT Window View</title>
+</head>
+
+<body>
+
+  <!--Start-->
+  <button id="myBtn">Open Modal</button>
+
+  <!--Bakgrund-->
+  <div id="myModal" class="modal">
+
+    <span class="close">&times;</span>
+
+    
+    <!--Content-->
+    <div class="modal-content">
+      <section class="bookGuessing">
+        <div class="output js-output-book-code-resulet">
+          <p class="js-get-book-box"></p>
+        </div>
+        <div class="inputs">
+          <div class="input-left">
+            <div class="input-left-bottom">
+              <button value="books1" id="guessButton1" class="guessButtons">1</button>
+            </div>
+            <div class="input-left-top">
+              <button value="books2" id="guessButton2" class="guessButtons">2</button>
+              <button value="books3" id="guessButton3" class="guessButtons">3</button>
+            </div>
+          </div>
+          <div class="input-right">
+            <div class="input-right-top">
+              <button value="books4" id="guessButton4" class="guessButtons">4</button>
+              <button value="books5" id="guessButton5" class="guessButtons">5</button>
+              <button value="books6" id="guessButton6" class="guessButtons">6</button>
+            </div>
+            <div class="input-right-bottom">
+              <button value="books7" id="guessButton7" class="guessButtons">7</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script type="module" src="index.js"></script>
+</body>
+
+</html>
