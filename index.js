@@ -1,45 +1,111 @@
-import { bookLocationCodes } from "./bookList.js";
-const allBooks = bookLocationCodes.allBooks;
-const score = {
-  right: 0,
-  wrong: 0
-}
+import BooklistsAndScore from "./data/BooklistAndScore.js";
+const data = new BooklistsAndScore();
 
-function app() {
+document.querySelector('.startButton').addEventListener('click', () => {
+  guessPage()
+});
+
+
+
+function guessPage() {
   let randomBook;
+  const allBooks = new BooklistsAndScore().allBooks;
+  const guessPageHtml = `
+    <section class="bookGuessing">
+      <div class="output js-output-book-code-resulet">
+        <p class="js-get-book-box"></p>
+      </div>
+      <div class="inputs">
+        <div class="input-left">
+          <div class="input-left-bottom">
+            <button value="books1" id="guessButton1" class="guessButtons">1</button>
+          </div>
+          <div class="input-left-top">
+            <button value="books2" id="guessButton2" class="guessButtons">2</button>
+            <button value="books3" id="guessButton3" class="guessButtons">3</button>
+          </div>
+        </div>
+        <div class="input-right">
+          <div class="input-right-top">
+            <button value="books4" id="guessButton4" class="guessButtons">4</button>
+            <button value="books5" id="guessButton5" class="guessButtons">5</button>
+            <button value="books6" id="guessButton6" class="guessButtons">6</button>
+          </div>
+          <div class="input-right-bottom">
+            <button value="books7" id="guessButton7" class="guessButtons">7</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+  document.querySelector('.modal-content').innerHTML = guessPageHtml;
 
-  const getRemoveAndDisplayRandomBook = () => {
-    randomBook = allBooks[Math.floor(Math.random() * bookLocationCodes.allBooks.length)];
+  function getRemoveAndDisplayRandomBook() {
+    randomBook = allBooks[Math.floor(Math.random() * allBooks.length)];
     allBooks.splice(allBooks.indexOf(randomBook), 1);
-    document.querySelector('.js-get-book-box').innerHTML = randomBook;
+    randomBook ? document.querySelector('.js-get-book-box').innerHTML = randomBook : resultPage();
   }
-  getRemoveAndDisplayRandomBook();
 
-  const removeColorFromButtons = () => {
-    document.querySelectorAll('.guessButtons').forEach(button => button.classList.remove(
-      'guessButtonsWrong', 'guessButtonsRight'
-    ));
+  function removeColorFromButtons() {
+    document.querySelectorAll('.guessButtons').forEach(button => button.classList.remove('guessButtonsWrong', 'guessButtonsRight'));
   }
+
+  getRemoveAndDisplayRandomBook();
 
   document.querySelectorAll('.guessButtons').forEach((guessButton) => {
     guessButton.addEventListener('click', (guessButton) => {
-      if (bookLocationCodes[`${guessButton.target.value}`].includes(randomBook)) {
-        score.right++
+      if (guessButton.target.classList.contains('guessButtonsWrong')) {
+        return alert('You have already guesst this location.');
+      }
+
+      if (data[`${guessButton.target.value}`].includes(randomBook)) {
         guessButton.target.classList.add('guessButtonsRight');
         setTimeout(() => {
+          data.calculateScore(true);
           removeColorFromButtons()
           getRemoveAndDisplayRandomBook()
-        }, 1000)
+        }, 500);
       } else {
-        score.wrong++
+        data.calculateScore(false);
         guessButton.target.classList.add('guessButtonsWrong');
       }
-      console.log(score);
     });
   });
 }
-app();
 
+function resultPage() {
+  const resultPageHtml = `
+    <section class="result">
+      <div class="resultTop">
+        <div class="resultTopInfo"><p>Ditt Resultat</p></div>
+        <div class="resultTopScore">
+          <div>Riktig: ${data.score.right}</div>
+          <div>Feil: ${data.score.wrong}</div>
+        </div>
+      </div>
+      <div class="resultMiddle">Middle</div>
+      <div class="resultBottom">
+        <div class="resultTopScoreRestart">
+          <button class="js-resultTopScoreRestart">Start Igjen</button>
+        </div>
+        <div class="resultBottomClose">
+          <button class="js-resultBottomClose">Lukk</button>
+        </div>
+      </div>
+    </section>
+  `;
+  document.querySelector('.modal-content').innerHTML = resultPageHtml;
+
+  document.querySelector('.js-resultTopScoreRestart').onclick = () => {
+    data.resettScore();
+    guessPage();
+  };
+
+  document.querySelector('.js-resultBottomClose').onclick = () => {
+    data.resettScore();
+    modal.style.display = "none";
+  };
+}
 
 
 
@@ -48,7 +114,7 @@ app();
 const modal = document.getElementById("myModal");
 
 // When the user clicks the button, open the modal 
-document.getElementById("myBtn").onclick = function () {
+document.querySelector('.startButton').onclick = function () {
   modal.style.display = "block";
 }
 
