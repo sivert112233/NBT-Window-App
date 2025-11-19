@@ -49,6 +49,7 @@ body {
   margin: auto;
   border: none;
   width: 80%;
+  height: 80%;
 }
 
 /* The Close Button */
@@ -69,16 +70,25 @@ body {
   cursor: pointer;
 }
 
+
+
 .bookGuessing {
-  position: relative;
-  overflow: hidden;
   display: grid;
   grid-template-rows: 1fr 4fr;
   gap: 10px;
-  min-height: 550px;
-  height: 100%;
   padding: 10px;
+  height: 100%;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 .output {
@@ -88,6 +98,13 @@ body {
   background-color: var(--boxColor);
   color: white;
 }
+
+
+
+
+
+
+
 
 .inputs {
   display: flex;
