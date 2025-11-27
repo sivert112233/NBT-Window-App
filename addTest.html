@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <div>
+    <p>
+      Test Doc for searching inn an objet
+    </p>
+    <button class="guessTest">GuessTest</button>
+    <input value="500" class="inputTest" type="text">
+    <button class="seeArray">Se array</button>
+    <p class="visLokasjon">Se lokasjoner:</p>
+    <button class="visLokasjonKnappOpp">Trykk opp</button>
+    <button class="visLokasjonKnappNed">Trykk ned</button>
+  </div>
+  <script>
+    const testButton = document.querySelector('.guessTest');
+    const inputTest = document.querySelector('.inputTest');
+    let t = 0;
+
+    const testArray = [
+      {
+        rendomBook: 100,
+        guessNumber: 0
+      }, {
+        rendomBook: 200,
+        guessNumber: 0
+      }, {
+        rendomBook: 300,
+        guessNumber: 0
+      }
+    ];
+
+    function searchArray() {
+      const book = Number(inputTest.value);
+      let result = true;
+      testArray.forEach((x) => {
+        if (x.rendomBook === book) {
+          x.guessNumber++;
+          result = false;
+        }
+      });
+      if (result) {
+        testArray.push({
+          rendomBook: book,
+          guessNumber: 0
+        });
+      }
+    }
+
+    document.querySelector('.guessTest').onclick = searchArray;
+    document.querySelector('.seeArray').onclick = () => { console.log(testArray) };
+
+    document.querySelector('.visLokasjonKnappOpp').addEventListener('click', () => {
+      display('b1');
+    });
+    document.querySelector('.visLokasjonKnappNed').addEventListener('click', () => {
+      display('b2');
+    });
+
+    const vis = document.querySelector('.visLokasjon');
+
+    let visTest = 0;
+    function display(button) {
+      (button === 'b1') && visTest++;
+      (button === 'b2') && visTest--;
+      (visTest === testArray.length) && (visTest = 0);
+      (visTest < 0) && (visTest = testArray.length - 1);
+      vis.innerHTML = `
+        ${testArray[visTest].rendomBook} and
+        ${testArray[visTest].guessNumber}
+      `;
+    }
+    display();
+  </script>
+</body>
+
+</html>

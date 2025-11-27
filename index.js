@@ -57,33 +57,67 @@ function guessPage() {
       if (guessButton.target.classList.contains('guessButtonsWrong')) {
         return alert('You have already guesst this location.');
       }
-
       if (data[`${guessButton.target.value}`].includes(randomBook)) {
         guessButton.target.classList.add('guessButtonsRight');
         setTimeout(() => {
           data.calculateScore(true);
-          removeColorFromButtons()
-          getRemoveAndDisplayRandomBook()
+          removeColorFromButtons();
+          getRemoveAndDisplayRandomBook();
         }, 500);
       } else {
         data.calculateScore(false);
         guessButton.target.classList.add('guessButtonsWrong');
+        data.addWrongLocationsGuessed(randomBook);
       }
+      /*-----------------------test----------------------------------*/
+      //console.log(data.wrongLocationsGuessed);
+
     });
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function resultPage() {
   const resultPageHtml = `
     <section class="result">
       <div class="resultTop">
-        <div class="resultTopInfo"><p>Ditt Resultat</p></div>
+        <div class="resultTopInfo">
+          <p>Ditt Resultat</p>
+        </div>
         <div class="resultTopScore">
           <div>Riktig: ${data.score.right}</div>
           <div>Feil: ${data.score.wrong}</div>
         </div>
       </div>
-      <div class="resultMiddle">Middle</div>
+      <div class="resultMiddle">
+        <div class="resultMiddleInfo">Resultat og statistikk</div>
+        <div class="resultMiddleNumber">Feil lokasjoner: ${data.wrongLocationsGuessed.length}</div>
+        <div class="resultMiddleStats">
+          <button class="resultMiddleStatButton1">Test</button>
+          <div class="resultMiddleStatInfo">
+            ${data.wrongLocationsGuessed.length === 0 ? '<div>No wrong locations</div>'
+              : 
+              `<div class="resultMiddleStatInfoDisplay">Lokasjon: ${data.wrongLocationsGuessed[0].location}</div>`
+            }
+          </div>
+          <button class="resultMiddleStatButton2">Test</button>
+        </div>
+      </div>
       <div class="resultBottom">
         <div class="resultTopScoreRestart">
           <button class="js-resultTopScoreRestart">Start Igjen</button>
@@ -92,20 +126,41 @@ function resultPage() {
           <button class="js-resultBottomClose">Lukk</button>
         </div>
       </div>
-    </section>
+    </section>  
   `;
+
   document.querySelector('.modal-content').innerHTML = resultPageHtml;
 
+  document.querySelector('.resultMiddleStatButton1').addEventListener('click', (x) => {
+    console.log(x.target);
+  });
+
+  document.querySelector('.resultMiddleStatButton2').onclick = () => {
+    console.log('ok');
+  };
+
   document.querySelector('.js-resultTopScoreRestart').onclick = () => {
-    data.resettScore();
+    data.resettProgram();
     guessPage();
   };
 
   document.querySelector('.js-resultBottomClose').onclick = () => {
-    data.resettScore();
+    data.resettProgram();
     modal.style.display = "none";
   };
+
+  function display() {
+    document.querySelector('.resultMiddleStatInfoDisplay').innerHTML =`
+    <div>Lokasjon: ${data.wrongLocationsGuessed[0].location}</div>
+    <div>Antall feil: ${data.wrongLocationsGuessed[0].amount}</div>
+    `;
+  }
+  display();
 }
+
+
+
+
 
 
 
